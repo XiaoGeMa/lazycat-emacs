@@ -72,14 +72,10 @@
 ;;
 
 ;;; Require
-
-(require 'dired-isearch)
-(require 'wdired)
 (require 'dired)
-(require 'dired+)                       ;增强dired
+(require 'dired-x)
 (require 'dired-details)                ;Dired详细信息
-(require 'dired-details+)               ;Dired详细消息切换
-(require 'grep-dired)                   ;Dired详细消息切换
+(require 'dired-details+)
 
 ;;; Code:
 
@@ -87,11 +83,10 @@
 (setq dired-recursive-deletes t)        ;可以递归的删除目录
 (setq dired-recursive-deletes 'always)  ;删除东西时不提示
 (setq dired-recursive-copies 'always)   ;拷贝东西时不提示
-(toggle-dired-find-file-reuse-dir 1)    ;使用单一模式浏览Dired
-(setq dired-details-hidden-string "[ ... ] ") ;设置隐藏dired里面详细信息的字符串
-(setq dired-listing-switches "-aluh")         ;传给 ls 的参数
-(setq directory-free-space-args "-Pkh")       ;目录空间选项
-(setq dired-omit-size-limit nil)              ;dired忽略的上限
+(setq dired-listing-switches "-aluh")   ;传给 ls 的参数
+(setq dired-details-hidden-string "") ;设置隐藏dired里面详细信息的字符串
+(setq directory-free-space-args "-Pkh") ;目录空间选项
+(setq dired-omit-size-limit nil)        ;dired忽略的上限
 (setq dired-dwim-target t)              ;Dired试着猜处默认的目标目录
 (setq my-dired-omit-status t)           ;设置默认忽略文件
 (setq my-dired-omit-regexp "^\\.?#\\|^\\..*") ;设置忽略文件的匹配正则表达式
@@ -100,10 +95,15 @@
                                       (progn
                                         (require 'dired-extension)
                                         (dired-sort-method)))) ;先显示目录, 然后显示文件
-(add-hook 'dired-mode-hook '(lambda ()
-                              (progn
-                                (require 'dired-extension)
-                                (dired-omit-method)))) ;隐藏文件的方法
+(add-hook
+ 'dired-mode-hook
+ '(lambda ()
+    (require 'dired-extension)
+    (dired-omit-method)                 ;隐藏文件的方法
+
+    (require 'dired+)
+    (toggle-dired-find-file-reuse-dir 1) ;使用单一模式浏览Dired
+    ))
 (setq dired-guess-shell-alist-user      ;设置文件默认打开的模式
       '(
         ;; 图书
@@ -128,7 +128,7 @@
 
 ;;; ### Dired ###
 ;;; --- 文件浏览器
-(lazy-set-key
+(lazy-load-set-keys
  '(
    ("h" . dired-next-subdir)            ;下一个子目录
    ("l" . dired-prev-subdir)            ;上一个子目录
@@ -143,31 +143,48 @@
    ("X" . traverse-cp-or-mv-extfiles-in-dir) ;拷贝或移动目录下指定扩展名的文件
    ("V" . traverse-dired-browse-archive)     ;浏览压缩文件
    ("," . dired-diff)                        ;比较文件
-   ("C-s" . dired-isearch-forward)           ;向后搜索
-   ("C-r" . dired-isearch-backward)          ;向前搜索
-   ("ESC C-s" . dired-isearch-forward-regexp)  ;向前正则表达式搜索
-   ("ESC C-r" . dired-isearch-backward-regexp) ;向后正则表达式搜索
-   ("SPC" . scroll-up)                         ;向下翻页
-   ("e" . scroll-down)                         ;向上翻页
-   ("c" . kill-this-buffer)                    ;关闭当前标签
-   ("/" . copy-buffer-file-name-as-kill)       ;显示路径或名称
-   ("s" . one-key-menu-dired-sort)             ;排序
-   ("F" . one-key-menu-dired-filter)           ;过滤
-   ("w" . wdired-change-to-wdired-mode)        ;切换到dired编辑模式
+   ("SPC" . scroll-up)                       ;向下翻页
+   ("e" . scroll-down)                       ;向上翻页
+   ("c" . kill-this-buffer)                  ;关闭当前标签
+   ("/" . copy-buffer-file-name-as-kill)     ;显示路径或名称
+   ("s" . one-key-menu-dired-sort)           ;排序
+   ("F" . one-key-menu-dired-filter)         ;过滤
+   ("w" . wdired-change-to-wdired-mode)      ;切换到dired编辑模式
    )
  dired-mode-map
  )
-(lazy-set-mode-autoload-key
+(lazy-load-local-keys
+ '(
+   ("w" . wdired-change-to-wdired-mode))
+ dired-mode-map
+ "wdired")
+(lazy-load-local-keys
+ '(
+   ("C-s" . dired-isearch-forward)             ;向后搜索
+   ("C-r" . dired-isearch-backward)            ;向前搜索
+   ("ESC C-s" . dired-isearch-forward-regexp)  ;向前正则表达式搜索
+   ("ESC C-r" . dired-isearch-backward-regexp) ;向后正则表达式搜索
+   )
+ dired-mode-map
+ "dired-isearch")
+(lazy-load-local-keys
+ '(
+   ("/" . copy-buffer-file-name-as-kill))
+ dired-mode-map
+ "buffer-extension")
+(lazy-load-local-keys
  '(
    (";" . dired-view-minor-mode-toggle) ;字母输入导航模式
    )
- dired-mode-map nil "dired-view")
-(lazy-set-mode-autoload-key
+ dired-mode-map
+ "dired-view")
+(lazy-load-local-keys
  '(
    ("T" . dired-tar-pack-unpack)
    )
- dired-mode-map nil "dired-tar")
-(lazy-set-mode-autoload-key
+ dired-mode-map
+ "dired-tar")
+(lazy-load-local-keys
  '(
    ("M-o" . dired-toggle-omit)          ;切换忽略状态
    ("?" . dired-get-size)               ;得到文件的大小
@@ -181,26 +198,34 @@
    ("{" . dired-gnome-open-file)        ;用GNOME方式打开文件
    ("E" . dired-touch-now)              ;Touch命令
    ("f" . dired-find-file+)             ;打开当前文件或目录
-   ("\"" . grep-dired-dwim)             ;查找特定的lisp文件
    ("C-m" . dired-find-file+)           ;打开当前文件或目录
    )
- dired-mode-map nil "dired-extension")
-(lazy-set-mode-autoload-key
+ dired-mode-map
+ "dired-extension")
+(lazy-load-local-keys
+ '(
+   ("\"" . grep-dired-dwim)             ;查找特定的lisp文件
+   )
+ dired-mode-map
+ "grep-dired")
+(lazy-load-local-keys
  '(
    ("K" . dired-open-file)              ;批量打开文件
    )
- dired-mode-map nil "dired-open")
-(lazy-set-mode-autoload-key
+ dired-mode-map
+ "dired-open")
+(lazy-load-local-keys
  '(
    ("]" . dired-show-file-qrcode))
- dired-mode-map nil "eaf.el")
+ dired-mode-map
+ "eaf.el")
 ;;; ### Wdired ###
 ;;; --- Dired 的编辑模式
 (eval-after-load 'wdired
   '(lambda ()
      (progn
        (require 'wdired-extension)
-       (lazy-set-key
+       (lazy-load-set-keys
         '(
           ("C-c C-e" . wdired-format-filename) ;格式化文件名
           )

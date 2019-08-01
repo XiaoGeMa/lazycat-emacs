@@ -83,7 +83,6 @@
 
 (require 'one-key)
 (require 'thing-edit)
-(require 'thing-edit-extension)
 
 ;;; Code:
 
@@ -110,23 +109,23 @@
         (("l" . "Copy Line") . thing-copy-line)
         (("a" . "Copy To Line Begin") . thing-copy-to-line-beginning)
         (("e" . "Copy To Line End") . thing-copy-to-line-end)
-        ;; Copy.
-        (("W" . "Paste Word") . thing-paste-word)
-        (("S" . "Paste Symbol") . thing-paste-symbol)
-        (("M" . "Paste Email") . thing-paste-email)
-        (("F" . "Paste Filename") . thing-paste-filename)
-        (("U" . "Paste URL") . thing-paste-url)
-        (("X" . "Paste Sexp") . thing-paste-sexp)
-        (("G" . "Paste Page") . thing-paste-page)
-        (("T" . "Paste Sentence") . thing-paste-sentence)
-        (("O" . "Paste Whitespace") . thing-paste-whitespace)
-        (("I" . "Paste List") . thing-paste-list)
-        (("C" . "Paste Comment") . thing-paste-comment)
-        (("H" . "Paste Function") . thing-paste-defun)
-        (("P" . "Paste Parentheses") . thing-paste-parentheses)
-        (("L" . "Paste Line") . thing-paste-line)
-        (("A" . "Paste To Line Begin") . thing-paste-to-line-beginning)
-        (("E" . "Paste To Line End") . thing-paste-to-line-end)
+        ;; Cut.
+        (("W" . "Cut Word") . thing-cut-word)
+        (("S" . "Cut Symbol") . thing-cut-symbol)
+        (("M" . "Cut Email") . thing-cut-email)
+        (("F" . "Cut Filename") . thing-cut-filename)
+        (("U" . "Cut URL") . thing-cut-url)
+        (("X" . "Cut Sexp") . thing-cut-sexp)
+        (("G" . "Cut Page") . thing-cut-page)
+        (("T" . "Cut Sentence") . thing-cut-sentence)
+        (("O" . "Cut Whitespace") . thing-cut-whitespace)
+        (("I" . "Cut List") . thing-cut-list)
+        (("C" . "Cut Comment") . thing-cut-comment)
+        (("H" . "Cut Function") . thing-cut-defun)
+        (("P" . "Cut Parentheses") . thing-cut-parentheses)
+        (("L" . "Cut Line") . thing-cut-line)
+        (("A" . "Cut To Line Begin") . thing-cut-to-line-beginning)
+        (("E" . "Cut To Line End") . thing-cut-to-line-end)
         ))
 
 (defun one-key-menu-thing-edit ()

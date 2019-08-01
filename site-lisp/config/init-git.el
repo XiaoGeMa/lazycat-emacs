@@ -80,11 +80,11 @@
 ;;
 
 ;;; Require
-
+(require 'magit)
 
 ;;; Code:
-
-(require 'magit)
+(exec-path-from-shell-initialize)
+(load-file (concat lazycat-emacs-extension-dir "/with-editor/with-editor.el"))
 
 ;; Magit configuration.
 (setq magit-commit-ask-to-stage nil)    ;don't ask stage question
@@ -139,7 +139,7 @@
 (setq one-key-menu-magithub-alist
       '(
         (("h" . "Browse") . magithub-browse)
-        (("H" . "Browse") . magithub-browse-file)
+        (("H" . "Browse file") . magithub-browse-file)
         (("i" . "Create issue") . magithub-issue-new)
         (("b" . "Browse issue") . magithub-issue-browse)
         (("B" . "Browse pull") . magithub-pull-browse)
@@ -153,10 +153,11 @@
 
 (defun magit-submodule-add+ (url)
   (interactive "sURL: ")
-  (magit-submodule-add
-   url
-   (concat (file-name-as-directory lazycat-emacs-extension-dir) (file-name-base url))
-   (file-name-base url)))
+  (let ((parent-dir (cadr (split-string (file-name-as-directory lazycat-emacs-extension-dir) (expand-file-name (cdr (project-current)))))))
+    (magit-submodule-add
+     url
+     (concat parent-dir (file-name-base url))
+     (file-name-base url))))
 
 (defun magit-submodule-remove+ ()
   (interactive)

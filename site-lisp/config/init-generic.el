@@ -92,6 +92,7 @@
 (fset 'yes-or-no-p 'y-or-n-p)           ;以 y/n代表 yes/no
 (blink-cursor-mode -1)                  ;指针不闪动
 (transient-mark-mode 1)                 ;标记高亮
+(global-subword-mode 1)                 ;Word移动支持 FooBar 的格式
 (setq use-dialog-box nil)               ;never pop dialog
 (setq inhibit-startup-screen t)         ;inhibit start screen
 (setq initial-scratch-message "") ;关闭启动空白buffer, 这个buffer会干扰session恢复
@@ -101,12 +102,27 @@
 (setq mouse-yank-at-point t)            ;粘贴于光标处,而不是鼠标指针处
 (setq x-select-enable-clipboard t)      ;支持emacs和外部程序的粘贴
 (setq split-width-threshold nil)        ;分屏的时候使用上下分屏
+(setq inhibit-compacting-font-caches t) ;使用字体缓存，避免卡顿
+(setq profiler-report-cpu-line-format ;让 profiler-report 第一列宽一点
+      '((100 left)
+        (24 right ((19 right)
+                   (5 right)))))
+(setq profiler-report-memory-line-format
+      '((100 left)
+        (19 right ((14 right profiler-format-number)
+                   (5 right)))))
 (add-hook 'find-file-hook 'highlight-parentheses-mode t) ;增强的括号高亮
 
+;; 不显示 *scratch*
+(defun remove-scratch-buffer ()
+  (if (get-buffer "*scratch*")
+      (kill-buffer "*scratch*")))
+(add-hook 'after-change-major-mode-hook 'remove-scratch-buffer)
+
 ;; Don't ask me when close emacs with process is running
-(require 'noflet)
 (defadvice save-buffers-kill-emacs (around no-query-kill-emacs activate)
   "Prevent annoying \"Active processes exist\" query when you quit Emacs."
+  (require 'noflet)
   (noflet ((process-list ())) ad-do-it))
 
 ;; Don't ask me when kill process buffer

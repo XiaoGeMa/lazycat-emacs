@@ -14,24 +14,37 @@ All my extensions under [extensions](https://github.com/manateelazycat/lazycat-e
 
 All my configuration files under [config](https://github.com/manateelazycat/lazycat-emacs/tree/master/site-lisp/extensions).
 
-## Installation
+## Download
+1. Download lazycat-emacs source code:
+```
+git clone https://github.com/manateelazycat/lazycat-emacs.git
+```
+
+2. Fetch all submodules in lazycat-emacs:
+```
+git submodule update --init --recursive
+```
 
 ### Mac OS High Sierra
 
-1. Install compile dependencies
-```
-$ brew install autoconf automake texinfo gnutls pkg-config --debug --verbose
-```
-    Note, you need install pkg-config before compile emacs git, otherwise ./configure emacs will throw error "can't found gnutls"
-
-2. Download emacs git code
+1. Download emacs git code
 ```
 $ git clone --depth 1 git://git.savannah.gnu.org/emacs.git
+```
+
+2. Install compile dependencies
+```
+$ brew install autoconf automake texinfo gnutls pkg-config libxml2 --debug --verbose
 ```
 
 3. Compile emacs git
 ```
 $ cd ./emacs && ./autogen.sh
+
+$ export LDFLAGS="-L/usr/local/opt/libxml2/lib"
+$ export CPPFLAGS="-I/usr/local/opt/libxml2/include"
+$ export PKG_CONFIG_PATH="/usr/local/opt/libxml2/lib/pkgconfig"
+
 $ ./configure && make && make install
 ```
 

@@ -100,7 +100,11 @@
 (require 'web-mode)
 (require 'emmet-mode)
 (require 'emmet-extension)
-;; (require 'indium)
+(require 'js)
+(require 'indium)
+(require 'awesome-pair)
+(require 'instant-rename-tag)
+(require 'highlight-matching-tag)
 
 ;;; Code:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; OS Config ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -109,6 +113,11 @@
   (require 'exec-path-from-shell)
   (exec-path-from-shell-initialize))
 
+(setq web-mode-enable-auto-quoting nil) ;disable automatic insertion of double quotes, not easy to use if cursor in string
+
+(highlight-matching-tag 1)
+
+;; Emmit.
 (setq web-mode-tag-auto-close-style 2) ;2 mean auto-close with > and </.
 (setq web-mode-markup-indent-offset 2)
 (dolist (hook (list
@@ -121,48 +130,48 @@
                    (setq emmet-preview-default nil)
                    (emmet-mode)
                    )))
+
 ;; Indium.
-;; (add-hook 'js-mode-hook #'indium-interaction-mode)
-;; (define-key indium-interaction-mode-map (kbd "C-c C-l") 'indium-reload)
+(add-hook 'js-mode-hook #'indium-interaction-mode)
+(define-key indium-interaction-mode-map (kbd "C-c C-l") 'indium-reload)
 
-;; (defvar one-key-menu-indium-alist nil
-;;   "The `one-key' menu alist for JS-REFACOTRY.")
+(defvar one-key-menu-indium-alist nil
+  "The `one-key' menu alist for JS-REFACOTRY.")
 
-;; (setq one-key-menu-indium-alist
-;;       '(
-;;         (("c" . "Indium connect") . indium-connect)
-;;         (("C" . "Indium launch") . indium-launch)
-;;         (("i" . "Indium switch REPL buffer") . indium-switch-to-repl-buffer)
-;;         (("a" . "Indium add breakpoint") . indium-add-breakpoint)
-;;         (("A" . "Indium add condition breakpoint") . indium-add-conditional-breakpoint)
-;;         (("e" . "Indium edit condition breakpoint") . indium-edit-breakpoint-condition)
-;;         (("l" . "Indium list breakpoints") . indium-list-breakpoints)
-;;         (("r" . "Indium remove breakpoint") . indium-remove-breakpoint)
-;;         (("R" . "Indium remove all breakpoints") . indium-remove-all-breakpoints-from-buffer)
-;;         (("t" . "Indium toggle breakpoint") . indium-toggle-breakpoint)
-;;         ))
+(setq one-key-menu-indium-alist
+      '(
+        (("c" . "Indium connect") . indium-connect)
+        (("C" . "Indium launch") . indium-launch)
+        (("i" . "Indium switch REPL buffer") . indium-switch-to-repl-buffer)
+        (("a" . "Indium add breakpoint") . indium-add-breakpoint)
+        (("A" . "Indium add condition breakpoint") . indium-add-conditional-breakpoint)
+        (("e" . "Indium edit condition breakpoint") . indium-edit-breakpoint-condition)
+        (("l" . "Indium list breakpoints") . indium-list-breakpoints)
+        (("r" . "Indium remove breakpoint") . indium-remove-breakpoint)
+        (("R" . "Indium remove all breakpoints") . indium-remove-all-breakpoints-from-buffer)
+        (("t" . "Indium toggle breakpoint") . indium-toggle-breakpoint)
+        ))
 
-;; (defun one-key-menu-indium ()
-;;   "The `one-key' menu for JS-REFACOTRY."
-;;   (interactive)
-;;   (one-key-menu "INDIUM" one-key-menu-indium-alist t))
+(defun one-key-menu-indium ()
+  "The `one-key' menu for JS-REFACOTRY."
+  (interactive)
+  (one-key-menu "INDIUM" one-key-menu-indium-alist t))
 
 ;; We-mode.
-(lazy-set-key awesome-pair-key-alist web-mode-map)
-(lazy-set-mode-autoload-key
+(lazy-load-set-keys awesome-pair-key-alist web-mode-map)
+(lazy-load-local-keys
  '(
-   ("M-(" . web-mode-element-wrap+)
-   ("M-)" . web-mode-element-unwrap)
-   ("M-R" . web-mode-element-rename)
    ("M-s-SPC" . web-mode-element-content-select)
    ("C-s-l" . web-mode-element-clone)
    ("C-M-SPC" . web-mode-mark-and-expand)
-   ("%" . web-mode-match-paren)
    ("C-:" . web-mode-comment-or-uncomment)
    ("M-i" . emmet-expand-yas)
    ("C-c M-i" . emmet-preview-current-line)
+   ("C-M-SPC" . mark-sexp)
+   ("M-R" . instant-rename-tag)
    )
- web-mode-map nil "web-mode-extension")
+ web-mode-map
+ "web-mode-extension")
 
 (provide 'init-web-mode)
 

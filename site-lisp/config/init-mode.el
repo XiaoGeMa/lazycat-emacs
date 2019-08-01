@@ -85,6 +85,19 @@
 
 ;;; ### auto-mode-alist ###
 ;;; --- 绑定扩展名到特定的模式
+(defun add-to-alist (alist-var elt-cons &optional no-replace)
+  "Add to the value of ALIST-VAR an element ELT-CONS if it isn't there yet.
+If an element with the same car as the car of ELT-CONS is already present,
+replace it with ELT-CONS unless NO-REPLACE is non-nil; if a matching
+element is not already present, add ELT-CONS to the front of the alist.
+The test for presence of the car of ELT-CONS is done with `equal'."
+  (let ((existing-element (assoc (car elt-cons) (symbol-value alist-var))))
+    (if existing-element
+        (or no-replace
+            (rplacd existing-element (cdr elt-cons)))
+      (set alist-var (cons elt-cons (symbol-value alist-var)))))
+  (symbol-value alist-var))
+
 (dolist (elt-cons '(
                     ("\\.markdown" . markdown-mode)
                     ("\\.md" . markdown-mode)
@@ -118,6 +131,8 @@
                     ("CMakeLists\\.txt\\'" . cmake-mode)
                     ("\\.cmake\\'" . cmake-mode)
                     ("\\.php\\'" . php-mode)
+                    ("\\.vue" . web-mode)
+                    ("\\.wxml" . web-mode)
                     ("\\.blade\\.php\\'" . web-mode)
                     ("\\.phtml\\'" . web-mode)
                     ("\\.tpl\\.php\\'" . web-mode)
@@ -129,8 +144,10 @@
                     ("\\.html?\\'" . web-mode)
                     ("\\.coffee\\'" . coffee-mode)
                     ("\\.coffee.erb\\'" . coffee-mode)
+                    ("\\.js.erb\\'" . js-mode)
                     ("\\.iced\\'" . coffee-mode)
                     ("\\.css\\'" . css-mode)
+                    ("\\.wxss\\'" . css-mode)
                     ("Cakefile\\'" . coffee-mode)
                     ("\\.styl$" . sws-mode)
                     ("\\.jade" . jade-mode)
@@ -140,10 +157,15 @@
                     ("\\.rs$" . rust-mode)
                     ("\\.pro$" . qmake-mode)
                     ("\\.js$" . js-mode)
+                    ("\\.wxs$" . js-mode)
+                    ("\\.jsx$" . web-mode)
                     ("\\.lua$" . lua-mode)
                     ("\\.swift$" . swift-mode)
                     ("\\.l$" . flex-mode)
                     ("\\.y$" . bison-mode)
+                    ("\\.pdf$" . pdf-view-mode)
+                    ("\\.cpp$" . c++-mode)
+                    ("\\.h$" . c++-mode)
                     ))
   (add-to-alist 'auto-mode-alist elt-cons))
 
@@ -170,8 +192,10 @@
 (autoload 'swift-mode "swift-mode")
 (autoload 'haskell-mode "init-haskell")
 (autoload 'js-mode "init-web-mode")
+(autoload 'rjsx-mode "rjsx-mode")
 (autoload 'flex-mode "flex")
 (autoload 'bison-mode "bison")
+(autoload 'pdf-view-mode "init-pdf-tools")
 
 ;;; ### Auto-fill ###
 ;;; --- 自动换行
@@ -182,6 +206,16 @@
                'org-mode-hook
                ))
   (add-hook hook '(lambda () (auto-fill-mode 1))))
+
+(dolist (hook (list
+               'markdown-mode-hook
+               ))
+  (add-hook hook
+            '(lambda ()
+               (require 'olivetti)
+               (olivetti-mode 1)
+               (olivetti-set-width 120)
+               )))
 
 (provide 'init-mode)
 
