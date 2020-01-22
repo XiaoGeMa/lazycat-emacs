@@ -86,21 +86,27 @@
 
 ;;; Code:
 
-(setq default-input-method "pyim")
 (setq pyim-page-tooltip 'posframe)
+(setq pyim-page-length 9)
+(setq pyim-posframe-min-width 0)
+
+;; Rime配置
+(liberime-start
+ (if (featurep 'cocoa)
+     "/Library/Input Methods/Squirrel.app/Contents/SharedSupport"
+   "/usr/share/rime-data")
+ (file-truename "~/.emacs.d/pyim/rime/"))
+
+(liberime-select-schema "luna_pinyin_simp")
+(setq pyim-default-scheme 'rime-quanpin)
+
+(setq default-input-method "pyim")
 (setq pyim-fuzzy-pinyin-alist
       '(("en" "eng") ("in" "ing") ("l" "n") ("z" "zh") ("c" "ch")))
 (setq pyim-punctuation-translate-p '(auto yes no))
 (setq-default pyim-english-input-switch-functions
               '(pyim-probe-isearch-mode))
-(setq pyim-page-length 9)
-(setq pyim-posframe-min-width 0)
 (setq pyim-dcache-backend 'pyim-dregcache)
-
-;; Rime配置
-(liberime-start "/Library/Input Methods/Squirrel.app/Contents/SharedSupport" (file-truename "~/.emacs.d/pyim/rime/"))
-(liberime-select-schema "luna_pinyin_simp")
-(setq pyim-default-scheme 'rime-quanpin)
 
 (provide 'init-pyim)
 

@@ -91,6 +91,7 @@
    ("<f2>" . refresh-file)              ;自动刷新文件
    ("s-f" . find-file-root)             ;用root打开文件
    ("s-r" . find-file-smb)              ;访问sambao
+   ("M-j" . join-lines)
    )
  "basic-toolkit")
 (lazy-load-global-keys
@@ -244,13 +245,13 @@
 ;;; --- 多标签浏览
 (lazy-load-set-keys
  '(
-   ("s-j" . awesome-tab-ace-jump)                  ;Ace jump
-   ("M-7" . awesome-tab-backward-tab)              ;移动到后一个标签
-   ("M-8" . awesome-tab-forward-tab)               ;移动到前一个标签
-   ("M-9" . awesome-tab-backward-group)            ;移动到后一个标签组
-   ("M-0" . awesome-tab-forward-group)             ;移动到前一个标签组
-   ("<C-tab>" . awesome-tab-backward-tab)          ;移动到后一个标签
-   ("<C-S-iso-lefttab>" . awesome-tab-forward-tab) ;移动到前一个标签
+   ("s-j" . awesome-tab-ace-jump)        ;Ace jump
+   ("M-7" . awesome-tab-backward-tab)    ;移动到后一个标签
+   ("M-8" . awesome-tab-forward-tab)     ;移动到前一个标签
+   ("M-9" . awesome-tab-backward-group)  ;移动到后一个标签组
+   ("M-0" . awesome-tab-forward-group)   ;移动到前一个标签组
+   ("<C-tab>" . awesome-tab-forward-tab) ;移动到后一个标签
+   ("<C-S-iso-lefttab>" . awesome-tab-backward-tab) ;移动到前一个标签
    ))
 (lazy-load-global-keys
  '(
@@ -332,19 +333,6 @@
    ("s-x s-x" . aweshell-dedicated-toggle)
    )
  "aweshell")
-;;; ### W3m ###
-;;; --- 网页浏览器
-(lazy-load-global-keys
- '(
-   ("C-z C-z" . w3m)                    ;启动W3M
-   )
- "init-w3m")
-(lazy-load-global-keys
- '(
-   ("C-z z" . w3m-startup-background)         ;启动W3M, 后台
-   ("C-x C-z" . toggle-w3m-with-other-buffer) ;在W3M和buffer间切换
-   )
- "w3m-extension")
 ;;; ### Dired ###
 ;;; --- Dired
 (lazy-load-global-keys
@@ -359,12 +347,13 @@
   (lazy-load-global-keys
    '(
      ("s-'" . eaf-open)
+     ("s-\"" . eaf-open-browser)
      ("s-/" . eaf-stop-process)
      )
    "init-eaf")
   (lazy-load-local-keys
    '(
-     ("K" . eaf-dired-open-file)
+     ("K" . eaf-open-this-from-dired)
      )
    dired-mode-map
    "init-eaf"))
@@ -559,10 +548,6 @@
 (lazy-load-global-keys
  '(
    ("C-c p" . one-key-menu-emms)        ;播放器菜单
-   ("<up>" . emms-volume-mode-plus)     ;增加音量
-   ("<down>" . emms-volume-mode-minus)  ;减少音量
-   ("<left>" . emms-seek-backward)      ;后退
-   ("<right>" . emms-seek-forward)      ;前进
    ("M-A" . emms-pause)                 ;暂停/播放
    ("M-X" . emms-random)                ;随机播放
    ("M-Z" . emms-stop)                  ;停止

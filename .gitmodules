@@ -7,9 +7,6 @@
 [submodule "company-english-helper"]
 	path = site-lisp/extensions/company-english-helper
 	url = https://github.com/manateelazycat/company-english-helper.git
-[submodule "emacs-application-framework"]
-	path = site-lisp/extensions/emacs-application-framework
-	url = https://github.com/manateelazycat/emacs-application-framework.git
 [submodule "typescript"]
 	path = site-lisp/extensions/typescript
 	url = https://github.com/ananthakumaran/typescript.el.git
@@ -154,9 +151,6 @@
 [submodule "site-lisp/extensions/with-editor"]
 	path = site-lisp/extensions/with-editor
 	url = https://github.com/magit/with-editor.git
-[submodule "benchmark-init-el"]
-	path = site-lisp/extensions/benchmark-init-el
-	url = https://github.com/dholm/benchmark-init-el.git
 [submodule "symbol-overlay"]
 	path = site-lisp/extensions/symbol-overlay
 	url = https://github.com/wolray/symbol-overlay.git
@@ -217,3 +211,15 @@
 [submodule "projectile"]
 	path = site-lisp/extensions/projectile
 	url = https://github.com/bbatsov/projectile.git
+[submodule "site-lisp/extensions/benchmark-init"]
+	path = site-lisp/extensions/benchmark-init
+	url = https://github.com/dholm/benchmark-init-el
+[submodule "sly-el-indent"]
+	path = site-lisp/extensions/sly-el-indent
+	url = https://github.com/cireu/sly-el-indent.git
+[submodule "elispfl"]
+	path = site-lisp/extensions/elispfl
+	url = https://github.com/cireu/elispfl.git
+[submodule "emacs-application-framework"]
+	path = site-lisp/extensions/emacs-application-framework
+	url = https://github.com/manateelazycat/emacs-application-framework.git

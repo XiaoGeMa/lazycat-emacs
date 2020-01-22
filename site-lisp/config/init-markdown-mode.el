@@ -1,17 +1,17 @@
-;;; init-auto-install.el --- Init for auto-install
+;;; init-markdown-mode.el --- Configure for markdown mode.
 
-;; Filename: init-auto-install.el
-;; Description: Init for auto-install
-;; Author: Andy Stewart <andy@freedom>
-;; Maintainer: Andy Stewart <andy@freedom>
-;; Copyright (C) 2013, Andy Stewart, all rights reserved.
-;; Created: 2013-12-30 16:00:06
+;; Filename: init-markdown-mode.el
+;; Description: Configure for markdown mode.
+;; Author: Andy Stewart <lazycat.manatee@gmail.com>
+;; Maintainer: Andy Stewart <lazycat.manatee@gmail.com>
+;; Copyright (C) 2019, Andy Stewart, all rights reserved.
+;; Created: 2019-09-22 08:25:25
 ;; Version: 0.1
-;; Last-Updated: 2013-12-30 16:00:06
+;; Last-Updated: 2019-09-22 08:25:25
 ;;           By: Andy Stewart
-;; URL: http://www.emacswiki.org/emacs/download/init-auto-install.el
+;; URL: http://www.emacswiki.org/emacs/download/init-markdown-mode.el
 ;; Keywords:
-;; Compatibility: GNU Emacs 24.3.50.1
+;; Compatibility: GNU Emacs 26.3
 ;;
 ;; Features that might be required by this library:
 ;;
@@ -39,19 +39,19 @@
 
 ;;; Commentary:
 ;;
-;; Init for auto-install
+;; Configure for markdown mode.
 ;;
 
 ;;; Installation:
 ;;
-;; Put init-auto-install.el to your load-path.
+;; Put init-markdown-mode.el to your load-path.
 ;; The load-path is usually ~/elisp/.
 ;; It's set in your ~/.emacs like this:
 ;; (add-to-list 'load-path (expand-file-name "~/elisp"))
 ;;
 ;; And the following to your ~/.emacs startup file.
 ;;
-;; (require 'init-auto-install)
+;; (require 'init-markdown-mode)
 ;;
 ;; No need more.
 
@@ -60,12 +60,12 @@
 ;;
 ;;
 ;; All of the above can customize by:
-;;      M-x customize-group RET init-auto-install RET
+;;      M-x customize-group RET init-markdown-mode RET
 ;;
 
 ;;; Change log:
 ;;
-;; 2013/12/30
+;; 2019/09/22
 ;;      * First released.
 ;;
 
@@ -80,15 +80,27 @@
 ;;
 
 ;;; Require
-
-(require 'auto-install)
+(require 'markdown-mode)
 
 ;;; Code:
 
-(setq auto-install-directory (concat lazycat-emacs-extension-dir "/lazycat")) ;设置默认的安装目录
-(setq auto-install-save-confirm nil)     ;不需要确认保存
-(setq auto-install-install-compile nil)  ;默认不编译文件
+(dolist (hook (list
+               'markdown-mode-hook
+               ))
+  (add-hook hook
+            '(lambda ()
+              (require 'olivetti)
+              (olivetti-mode 1)
+              (olivetti-set-width 120)
 
-(provide 'init-auto-install)
+              (require 'init-pyim)
+              (lazy-load-set-keys
+               '(
+                 ("M-f" . pyim-forward-word)
+                 ("M-b" . pyim-backward-word))
+               markdown-mode-map)
+              )))
 
-;;; init-auto-install.el ends here
+(provide 'init-markdown-mode)
+
+;;; init-markdown-mode.el ends here

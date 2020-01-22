@@ -166,6 +166,8 @@ The test for presence of the car of ELT-CONS is done with `equal'."
                     ("\\.pdf$" . pdf-view-mode)
                     ("\\.cpp$" . c++-mode)
                     ("\\.h$" . c++-mode)
+                    ("\\.ll$" . llvm-mode)
+                    ("\\.bc$" . hexl-mode)
                     ))
   (add-to-alist 'auto-mode-alist elt-cons))
 
@@ -175,7 +177,7 @@ The test for presence of the car of ELT-CONS is done with `equal'."
 ;;; Mode load.
 (autoload 'cmake-mode "cmake-mode")
 (autoload 'qml-mode "qml-mode")
-(autoload 'markdown-mode "markdown-mode")
+(autoload 'markdown-mode "init-markdown-mode")
 (autoload 'php-mode "php-mode")
 (autoload 'web-mode "init-web-mode")
 (autoload 'coffee-mode "coffee-mode")
@@ -196,6 +198,7 @@ The test for presence of the car of ELT-CONS is done with `equal'."
 (autoload 'flex-mode "flex")
 (autoload 'bison-mode "bison")
 (autoload 'pdf-view-mode "init-pdf-tools")
+(autoload 'llvm-mode "llvm-mode")
 
 ;;; ### Auto-fill ###
 ;;; --- 自动换行
@@ -208,14 +211,18 @@ The test for presence of the car of ELT-CONS is done with `equal'."
   (add-hook hook '(lambda () (auto-fill-mode 1))))
 
 (dolist (hook (list
-               'markdown-mode-hook
+               'org-mode-hook
                ))
   (add-hook hook
             '(lambda ()
-               (require 'olivetti)
-               (olivetti-mode 1)
-               (olivetti-set-width 120)
-               )))
+              (require 'olivetti)
+              (olivetti-mode 1)
+              (olivetti-set-width 120)
+              )))
+
+(with-eval-after-load  'ielm
+  (require 'elispfl)
+  (elispfl-ielm-mode))
 
 (provide 'init-mode)
 
