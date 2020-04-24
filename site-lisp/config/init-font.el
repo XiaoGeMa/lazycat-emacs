@@ -1,17 +1,17 @@
-;;; init-org.el --- Configure for org-mode
+;;; init-font.el --- Font configuration
 
-;; Filename: init-org.el
-;; Description: Configure for org-mode
+;; Filename: init-font.el
+;; Description: Font configuration
 ;; Author: Andy Stewart <lazycat.manatee@gmail.com>
 ;; Maintainer: Andy Stewart <lazycat.manatee@gmail.com>
 ;; Copyright (C) 2020, Andy Stewart, all rights reserved.
-;; Created: 2020-03-31 22:32:49
+;; Created: 2020-03-22 11:16:26
 ;; Version: 0.1
-;; Last-Updated: 2020-03-31 22:32:49
+;; Last-Updated: 2020-03-22 11:16:26
 ;;           By: Andy Stewart
-;; URL: http://www.emacswiki.org/emacs/download/init-org.el
+;; URL: http://www.emacswiki.org/emacs/download/init-font.el
 ;; Keywords:
-;; Compatibility: GNU Emacs 28.0.50
+;; Compatibility: GNU Emacs 26.3
 ;;
 ;; Features that might be required by this library:
 ;;
@@ -39,19 +39,19 @@
 
 ;;; Commentary:
 ;;
-;; Configure for org-mode
+;; Font configuration
 ;;
 
 ;;; Installation:
 ;;
-;; Put init-org.el to your load-path.
+;; Put init-font.el to your load-path.
 ;; The load-path is usually ~/elisp/.
 ;; It's set in your ~/.emacs like this:
 ;; (add-to-list 'load-path (expand-file-name "~/elisp"))
 ;;
 ;; And the following to your ~/.emacs startup file.
 ;;
-;; (require 'init-org)
+;; (require 'init-font)
 ;;
 ;; No need more.
 
@@ -60,12 +60,12 @@
 ;;
 ;;
 ;; All of the above can customize by:
-;;      M-x customize-group RET init-org RET
+;;      M-x customize-group RET init-font RET
 ;;
 
 ;;; Change log:
 ;;
-;; 2020/03/31
+;; 2020/03/22
 ;;      * First released.
 ;;
 
@@ -84,34 +84,30 @@
 
 ;;; Code:
 
+(let ((emacs-font-size 14)
+      emacs-font-name)
+  (cond
+   ((featurep 'cocoa)
+    (setq emacs-font-name "Monaco"))
+   ((string-equal system-type "gnu/linux")
+    (setq emacs-font-name "WenQuanYi Micro Hei Mono")))
+  (when (display-grayscale-p)
+    (set-frame-font (format "%s-%s" (eval emacs-font-name) (eval emacs-font-size)))
+    (set-fontset-font (frame-parameter nil 'font) 'unicode (eval emacs-font-name))
+
+    (setq nox-doc-tooltip-font (format "%s-%s" emacs-font-name emacs-font-size))
+    ))
+
 (with-eval-after-load 'org
-  (setq org-odt-preferred-output-format "docx") ;ODT转换格式默认为docx
-  (setq org-startup-folded nil)                 ;默认展开内容
-  (setq org-startup-indented t)                 ;默认缩进内容
-
-  (defun org-export-docx ()
+  (defun org-buffer-face-mode-variable ()
     (interactive)
-    (let ((docx-file (concat (file-name-sans-extension (buffer-file-name)) ".docx"))
-          (template-file (concat (file-name-as-directory lazycat-emacs-root-dir)
-                                 (file-name-as-directory "template")
-                                 "template.docx")))
-      (shell-command (format "pandoc %s -o %s --reference-doc=%s"
-                             (buffer-file-name)
-                             docx-file
-                             template-file
-                             ))
-      (message "Convert finish: %s" docx-file))))
+    (make-face 'width-font-face)
+    (set-face-attribute 'width-font-face nil :font "等距更纱黑体 SC 15")
+    (setq buffer-face-mode-face 'width-font-face)
+    (buffer-face-mode))
 
-(dolist (hook (list
-               'org-mode-hook
-               ))
-  (add-hook hook '(lambda ()
-                    (require 'org-table-auto-align)
-                    (org-table-auto-align-mode)
+  (add-hook 'org-mode-hook 'org-buffer-face-mode-variable))
 
-                    (setq truncate-lines nil) ;自动折行
-                    )))
+(provide 'init-font)
 
-(provide 'init-org)
-
-;;; init-org.el ends here
+;;; init-font.el ends here

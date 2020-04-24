@@ -1,17 +1,17 @@
-;;; init-org.el --- Configure for org-mode
+;;; init-nox.el --- Configure for nox
 
-;; Filename: init-org.el
-;; Description: Configure for org-mode
+;; Filename: init-nox.el
+;; Description: Configure for nox
 ;; Author: Andy Stewart <lazycat.manatee@gmail.com>
 ;; Maintainer: Andy Stewart <lazycat.manatee@gmail.com>
 ;; Copyright (C) 2020, Andy Stewart, all rights reserved.
-;; Created: 2020-03-31 22:32:49
+;; Created: 2020-03-28 16:24:15
 ;; Version: 0.1
-;; Last-Updated: 2020-03-31 22:32:49
+;; Last-Updated: 2020-03-28 16:24:15
 ;;           By: Andy Stewart
-;; URL: http://www.emacswiki.org/emacs/download/init-org.el
+;; URL: http://www.emacswiki.org/emacs/download/init-nox.el
 ;; Keywords:
-;; Compatibility: GNU Emacs 28.0.50
+;; Compatibility: GNU Emacs 26.3
 ;;
 ;; Features that might be required by this library:
 ;;
@@ -39,19 +39,19 @@
 
 ;;; Commentary:
 ;;
-;; Configure for org-mode
+;; Configure for nox
 ;;
 
 ;;; Installation:
 ;;
-;; Put init-org.el to your load-path.
+;; Put init-nox.el to your load-path.
 ;; The load-path is usually ~/elisp/.
 ;; It's set in your ~/.emacs like this:
 ;; (add-to-list 'load-path (expand-file-name "~/elisp"))
 ;;
 ;; And the following to your ~/.emacs startup file.
 ;;
-;; (require 'init-org)
+;; (require 'init-nox)
 ;;
 ;; No need more.
 
@@ -60,12 +60,12 @@
 ;;
 ;;
 ;; All of the above can customize by:
-;;      M-x customize-group RET init-org RET
+;;      M-x customize-group RET init-nox RET
 ;;
 
 ;;; Change log:
 ;;
-;; 2020/03/31
+;; 2020/03/28
 ;;      * First released.
 ;;
 
@@ -80,38 +80,34 @@
 ;;
 
 ;;; Require
-
+(require 'xref)
 
 ;;; Code:
 
-(with-eval-after-load 'org
-  (setq org-odt-preferred-output-format "docx") ;ODT转换格式默认为docx
-  (setq org-startup-folded nil)                 ;默认展开内容
-  (setq org-startup-indented t)                 ;默认缩进内容
-
-  (defun org-export-docx ()
-    (interactive)
-    (let ((docx-file (concat (file-name-sans-extension (buffer-file-name)) ".docx"))
-          (template-file (concat (file-name-as-directory lazycat-emacs-root-dir)
-                                 (file-name-as-directory "template")
-                                 "template.docx")))
-      (shell-command (format "pandoc %s -o %s --reference-doc=%s"
-                             (buffer-file-name)
-                             docx-file
-                             template-file
-                             ))
-      (message "Convert finish: %s" docx-file))))
-
 (dolist (hook (list
-               'org-mode-hook
+               'rust-mode-hook
+               'python-mode-hook
+               'ruby-mode-hook
+               'java-mode-hook
+               'sh-mode-hook
+               'php-mode-hook
+               'c-mode-common-hook
+               'c-mode-hook
+               'c++-mode-hook
+               'haskell-mode-hook
                ))
   (add-hook hook '(lambda ()
-                    (require 'org-table-auto-align)
-                    (org-table-auto-align-mode)
+                    (require 'nox)
+                    (nox-ensure))))
 
-                    (setq truncate-lines nil) ;自动折行
-                    )))
+(lazy-load-set-keys
+ '(
+   ("j" . xref-next-line)
+   ("k" . xref-prev-line)
+   )
+ xref--xref-buffer-mode-map
+ )
 
-(provide 'init-org)
+(provide 'init-nox)
 
-;;; init-org.el ends here
+;;; init-nox.el ends here

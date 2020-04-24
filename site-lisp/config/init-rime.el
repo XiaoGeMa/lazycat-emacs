@@ -1,17 +1,17 @@
-;;; init-smex.el --- Init for smex
+;;; init-rime.el --- Configuration for emacs-rime
 
-;; Filename: init-smex.el
-;; Description: Init for smex
+;; Filename: init-rime.el
+;; Description: Configuration for emacs-rime
 ;; Author: Andy Stewart <lazycat.manatee@gmail.com>
 ;; Maintainer: Andy Stewart <lazycat.manatee@gmail.com>
-;; Copyright (C) 2014, Andy Stewart, all rights reserved.
-;; Created: 2014-10-06 16:03:57
+;; Copyright (C) 2020, Andy Stewart, all rights reserved.
+;; Created: 2020-03-22 14:52:23
 ;; Version: 0.1
-;; Last-Updated: 2014-10-06 16:03:57
+;; Last-Updated: 2020-03-22 14:52:23
 ;;           By: Andy Stewart
-;; URL: http://www.emacswiki.org/emacs/download/init-smex.el
+;; URL: http://www.emacswiki.org/emacs/download/init-rime.el
 ;; Keywords:
-;; Compatibility: GNU Emacs 24.4.50.1
+;; Compatibility: GNU Emacs 26.3
 ;;
 ;; Features that might be required by this library:
 ;;
@@ -39,19 +39,19 @@
 
 ;;; Commentary:
 ;;
-;; Init for smex
+;; Configuration for emacs-rime
 ;;
 
 ;;; Installation:
 ;;
-;; Put init-smex.el to your load-path.
+;; Put init-rime.el to your load-path.
 ;; The load-path is usually ~/elisp/.
 ;; It's set in your ~/.emacs like this:
 ;; (add-to-list 'load-path (expand-file-name "~/elisp"))
 ;;
 ;; And the following to your ~/.emacs startup file.
 ;;
-;; (require 'init-smex)
+;; (require 'init-rime)
 ;;
 ;; No need more.
 
@@ -60,12 +60,12 @@
 ;;
 ;;
 ;; All of the above can customize by:
-;;      M-x customize-group RET init-smex RET
+;;      M-x customize-group RET init-rime RET
 ;;
 
 ;;; Change log:
 ;;
-;; 2014/10/06
+;; 2020/03/22
 ;;      * First released.
 ;;
 
@@ -80,19 +80,27 @@
 ;;
 
 ;;; Require
-
-(require 'smex)
+(require 'rime)
 
 ;;; Code:
+(setq rime-user-data-dir "/home/andy/.config/fcitx/rime")
 
-(smex-initialize)
+(setq rime-posframe-properties
+      (list :background-color "#333333"
+            :foreground-color "#dcdccc"
+            :font "WenQuanYi Micro Hei Mono-14"
+            :internal-border-width 10))
 
-(defun smex+ ()
-  (interactive)
-  (let ((resize-mini-windows nil))
-    (smex)
-    ))
+(setq default-input-method "rime"
+      rime-show-candidate 'posframe)
 
-(provide 'init-smex)
+(lazy-load-set-keys
+ '(
+   ("M-o" . rime--backspace)
+   ("M-m" . rime--return)
+   ("M-h" . rime--escape))
+ rime-active-mode-map)
 
-;;; init-smex.el ends here
+(provide 'init-rime)
+
+;;; init-rime.el ends here

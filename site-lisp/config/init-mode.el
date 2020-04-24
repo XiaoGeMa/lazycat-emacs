@@ -206,23 +206,8 @@ The test for presence of the car of ELT-CONS is done with `equal'."
 (dolist (hook (list
                'after-text-mode-hook
                'message-mode-hook
-               'org-mode-hook
                ))
   (add-hook hook '(lambda () (auto-fill-mode 1))))
-
-(dolist (hook (list
-               'org-mode-hook
-               ))
-  (add-hook hook
-            '(lambda ()
-              (require 'olivetti)
-              (olivetti-mode 1)
-              (olivetti-set-width 120)
-              )))
-
-(with-eval-after-load  'ielm
-  (require 'elispfl)
-  (elispfl-ielm-mode))
 
 (provide 'init-mode)
 

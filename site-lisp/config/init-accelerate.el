@@ -1,17 +1,17 @@
-;;; init-smex.el --- Init for smex
+;;; init-accelerate.el --- Accelerate the start Emacs
 
-;; Filename: init-smex.el
-;; Description: Init for smex
+;; Filename: init-accelerate.el
+;; Description: Accelerate the start Emacs
 ;; Author: Andy Stewart <lazycat.manatee@gmail.com>
 ;; Maintainer: Andy Stewart <lazycat.manatee@gmail.com>
-;; Copyright (C) 2014, Andy Stewart, all rights reserved.
-;; Created: 2014-10-06 16:03:57
+;; Copyright (C) 2020, Andy Stewart, all rights reserved.
+;; Created: 2020-03-22 11:17:30
 ;; Version: 0.1
-;; Last-Updated: 2014-10-06 16:03:57
+;; Last-Updated: 2020-03-22 11:17:30
 ;;           By: Andy Stewart
-;; URL: http://www.emacswiki.org/emacs/download/init-smex.el
+;; URL: http://www.emacswiki.org/emacs/download/init-accelerate.el
 ;; Keywords:
-;; Compatibility: GNU Emacs 24.4.50.1
+;; Compatibility: GNU Emacs 26.3
 ;;
 ;; Features that might be required by this library:
 ;;
@@ -39,19 +39,19 @@
 
 ;;; Commentary:
 ;;
-;; Init for smex
+;; Accelerate the start Emacs
 ;;
 
 ;;; Installation:
 ;;
-;; Put init-smex.el to your load-path.
+;; Put init-accelerate.el to your load-path.
 ;; The load-path is usually ~/elisp/.
 ;; It's set in your ~/.emacs like this:
 ;; (add-to-list 'load-path (expand-file-name "~/elisp"))
 ;;
 ;; And the following to your ~/.emacs startup file.
 ;;
-;; (require 'init-smex)
+;; (require 'init-accelerate)
 ;;
 ;; No need more.
 
@@ -60,12 +60,12 @@
 ;;
 ;;
 ;; All of the above can customize by:
-;;      M-x customize-group RET init-smex RET
+;;      M-x customize-group RET init-accelerate RET
 ;;
 
 ;;; Change log:
 ;;
-;; 2014/10/06
+;; 2020/03/22
 ;;      * First released.
 ;;
 
@@ -81,18 +81,17 @@
 
 ;;; Require
 
-(require 'smex)
 
 ;;; Code:
+(setq
+ ;; 不要缩放frame.
+ frame-inhibit-implied-resize t
+ ;; 默认用最简单的模式
+ initial-major-mode 'fundamental-mode
+ ;; 不要自动启用package
+ package-enable-at-startup nil
+ package--init-file-ensured t)
 
-(smex-initialize)
+(provide 'init-accelerate)
 
-(defun smex+ ()
-  (interactive)
-  (let ((resize-mini-windows nil))
-    (smex)
-    ))
-
-(provide 'init-smex)
-
-;;; init-smex.el ends here
+;;; init-accelerate.el ends here

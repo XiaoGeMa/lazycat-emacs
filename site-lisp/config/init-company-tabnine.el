@@ -1,17 +1,17 @@
-;;; init-smex.el --- Init for smex
+;;; init-company-tabnine.el --- Configure for TabNine
 
-;; Filename: init-smex.el
-;; Description: Init for smex
+;; Filename: init-company-tabnine.el
+;; Description: Configure for TabNine
 ;; Author: Andy Stewart <lazycat.manatee@gmail.com>
 ;; Maintainer: Andy Stewart <lazycat.manatee@gmail.com>
-;; Copyright (C) 2014, Andy Stewart, all rights reserved.
-;; Created: 2014-10-06 16:03:57
+;; Copyright (C) 2020, Andy Stewart, all rights reserved.
+;; Created: 2020-03-28 15:54:37
 ;; Version: 0.1
-;; Last-Updated: 2014-10-06 16:03:57
+;; Last-Updated: 2020-03-28 15:54:37
 ;;           By: Andy Stewart
-;; URL: http://www.emacswiki.org/emacs/download/init-smex.el
+;; URL: http://www.emacswiki.org/emacs/download/init-company-tabnine.el
 ;; Keywords:
-;; Compatibility: GNU Emacs 24.4.50.1
+;; Compatibility: GNU Emacs 26.3
 ;;
 ;; Features that might be required by this library:
 ;;
@@ -39,19 +39,19 @@
 
 ;;; Commentary:
 ;;
-;; Init for smex
+;; Configure for TabNine
 ;;
 
 ;;; Installation:
 ;;
-;; Put init-smex.el to your load-path.
+;; Put init-company-tabnine.el to your load-path.
 ;; The load-path is usually ~/elisp/.
 ;; It's set in your ~/.emacs like this:
 ;; (add-to-list 'load-path (expand-file-name "~/elisp"))
 ;;
 ;; And the following to your ~/.emacs startup file.
 ;;
-;; (require 'init-smex)
+;; (require 'init-company-tabnine)
 ;;
 ;; No need more.
 
@@ -60,12 +60,12 @@
 ;;
 ;;
 ;; All of the above can customize by:
-;;      M-x customize-group RET init-smex RET
+;;      M-x customize-group RET init-company-tabnine RET
 ;;
 
 ;;; Change log:
 ;;
-;; 2014/10/06
+;; 2020/03/28
 ;;      * First released.
 ;;
 
@@ -80,19 +80,23 @@
 ;;
 
 ;;; Require
-
-(require 'smex)
+(require 'company-tabnine)
 
 ;;; Code:
 
-(smex-initialize)
+;; The free version of TabNine is good enough,
+;; and below code is recommended that TabNine not always
+;; prompt me to purchase a paid version in a large project.
+(defadvice company-echo-show (around disable-tabnine-upgrade-message activate)
+  (let ((company-message-func (ad-get-arg 0)))
+    (when (and company-message-func
+               (stringp (funcall company-message-func)))
+      (unless (string-match "The free version of TabNine only indexes up to" (funcall company-message-func))
+        ad-do-it))))
 
-(defun smex+ ()
-  (interactive)
-  (let ((resize-mini-windows nil))
-    (smex)
-    ))
+;; TabNine
+(add-to-list 'company-backends #'company-tabnine)
 
-(provide 'init-smex)
+(provide 'init-company-tabnine)
 
-;;; init-smex.el ends here
+;;; init-company-tabnine.el ends here

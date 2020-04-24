@@ -92,13 +92,6 @@
               (require 'olivetti)
               (olivetti-mode 1)
               (olivetti-set-width 120)
-
-              (require 'init-pyim)
-              (lazy-load-set-keys
-               '(
-                 ("M-f" . pyim-forward-word)
-                 ("M-b" . pyim-backward-word))
-               markdown-mode-map)
               )))
 
 (provide 'init-markdown-mode)

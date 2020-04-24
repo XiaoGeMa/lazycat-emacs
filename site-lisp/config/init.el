@@ -1,8 +1,16 @@
+;; 加速配置。
+(require 'init-accelerate)
+
+;; 字体设置
+(require 'init-font)
+
 (let (
       ;; 加载的时候临时增大`gc-cons-threshold'以加速启动速度。
       (gc-cons-threshold most-positive-fixnum)
+      (gc-cons-percentage 0.6)
       ;; 清空避免加载远程文件的时候分析文件。
       (file-name-handler-alist nil))
+
   ;; 定义一些启动目录，方便下次迁移修改
   (defvar lazycat-emacs-root-dir (file-truename "~/lazycat-emacs/site-lisp"))
   (defvar lazycat-emacs-config-dir (concat lazycat-emacs-root-dir "/config"))
@@ -13,14 +21,11 @@
     (require 'benchmark-init)
     (benchmark-init/activate)
 
-    ;; 先设置背景，避免闪烁。
-    (custom-set-faces
-     '(default ((t (:background "black" :foreground "#137D11")))))
-
     (require 'init-startup)
 
     (require 'init-generic)
     (require 'lazycat-theme)
+    (lazycat-theme-load-with-sunrise)
     (when (featurep 'cocoa)
       (require 'cache-path-from-shell))
     (require 'lazy-load)
@@ -37,7 +42,6 @@
     (require 'init-line-number)
     (require 'init-auto-save)
     (require 'init-mode)
-    (require 'init-sdcv)
     (require 'init-dired)
     (require 'init-awesome-pair)
     (require 'init-indent)
@@ -62,17 +66,18 @@
          (require 'init-cursor-chg)
          (require 'init-winpoint)
          (require 'init-info)
-         (require 'init-atomic-chrome)
          (require 'init-c)
          (require 'init-flycheck)
-         (require 'init-cnfonts)
+         (require 'init-org)
 
          (require 'init-idle)
 
          (require 'init-auto-sudoedit)
          (require 'init-highlight-indent-guides)
-         (require 'init-pyim)
+         (require 'init-rime)
          (require 'init-eaf)
+         (require 'init-nox)
+         (require 'init-sdcv)           ; Don't remove this line
 
          ;; Restore session at last.
          (require 'init-session)
